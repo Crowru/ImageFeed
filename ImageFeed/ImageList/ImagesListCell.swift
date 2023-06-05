@@ -6,3 +6,12 @@ class ImagesListCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var imageCell: UIImageView!
 }
+
+extension ImagesListCell {
+    func configure(image: UIImage, date: String, isLiked: Bool) {
+        imageCell.image = image
+        dateLabel.text = date
+        let likeImage = isLiked ? UIImage(named: "likeOn") : UIImage(named: "likeOff")
+        likeButton.setImage(likeImage, for: .normal)
+    }
+}

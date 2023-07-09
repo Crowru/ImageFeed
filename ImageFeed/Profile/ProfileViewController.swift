@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
     private let profilePhoto: UIImageView = {
         let image = UIImage(named: "userPhoto")

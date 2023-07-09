@@ -1,6 +1,6 @@
 import UIKit
 
-class ImagesListCell: UITableViewCell {
+final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
@@ -8,7 +8,7 @@ class ImagesListCell: UITableViewCell {
 }
 
 extension ImagesListCell {
-    func configure(image: UIImage, date: String, isLiked: Bool) {
+    final func configure(image: UIImage, date: String, isLiked: Bool) {
         imageCell.image = image
         dateLabel.text = date
         let likeImage = isLiked ? UIImage(named: "likeOn") : UIImage(named: "likeOff")

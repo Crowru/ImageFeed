@@ -16,7 +16,9 @@ final class OAuth2Service {
     }
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let request = authTokenRequest(code: code)
+        guard let request = authTokenRequest(code: code) else {
+            fatalError("Unable to create fetch authorization token request")
+        }
         let task = object(for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -47,16 +49,20 @@ extension OAuth2Service {
         }
     }
     
-    func authTokenRequest(code: String) -> URLRequest {
-        URLRequest.makeHTTPRequest(
-            path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
-        )
+    func authTokenRequest(code: String) -> URLRequest? {
+        guard let url = URL(string: "https://unsplash.com"),
+              let request = URLRequest.makeHTTPRequest(
+                path: "/oauth/token"
+                + "?client_id=\(accessKey)"
+                + "&&client_secret=\(secretKey)"
+                + "&&redirect_uri=\(redirectURI)"
+                + "&&code=\(code)"
+                + "&&grant_type=authorization_code",
+                httpMethod: "POST",
+                baseURL: url)
+        else {
+            return nil
+        }
+        return request
     }
 }

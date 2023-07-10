@@ -6,33 +6,33 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
-    @IBOutlet private weak var authButton: UIButton!
-    
     private let segueIdentifier = "ShowWebView"
     private let oAuth2Service = OAuth2Service()
     private let oAuth2TokenStorage = OAuth2TokenStorage()
     
     weak var delegate: AuthViewControllerDelegate?
     
+    @IBOutlet private weak var authButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.barStyle = .black
 
         authButton.layer.cornerRadius = 16
         authButton.layer.masksToBounds = true
     }
     
-    @IBAction private func didTapLoginButton(_ sender: UIButton) {
-        
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueIdentifier {
-            let viewController = segue.destination as! WebViewViewController
+        if segue.identifier == segueIdentifier,
+           let viewController = segue.destination as? WebViewViewController {
             viewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
+    }
+    
+    @IBAction private func didTapLoginButton(_ sender: UIButton) {
+        
     }
     
     @IBAction private func didTapAuthButton(_ sender: Any?) {
@@ -42,18 +42,7 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        oAuth2Service.fetchOAuthToken(code) { [weak self] result in
-            guard let self else { return }
-
-            switch result {
-            case .success(let token):
-                self.oAuth2TokenStorage.token = token
-                self.delegate?.authViewController(self, didAuthenticateWithCode: code)
-                print(token)
-            case .failure(let error):
-                print(error)
-            }
-        }
+        self.delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

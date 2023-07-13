@@ -20,14 +20,20 @@ final class WebViewViewController: UIViewController {
         
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: AuthorizeURLString)!
+        guard var urlComponents = URLComponents(string: authorizeURLString) else {
+            fatalError("Incorrect base URL")
+        }
+        
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AccessKey),
-            URLQueryItem(name: "redirect_uri", value: RedirectURI),
+            URLQueryItem(name: "client_id", value: accessKey),
+            URLQueryItem(name: "redirect_uri", value: redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: AccessScope)
+            URLQueryItem(name: "scope", value: accessScope)
         ]
-        let url = urlComponents.url!
+
+        guard let url = urlComponents.url else {
+            fatalError("Unable to build URL")
+        }
         
         let request = URLRequest(url: url)
         
@@ -64,8 +70,11 @@ final class WebViewViewController: UIViewController {
     }
     
     private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
+        //progressView.progress = Float(webView.estimatedProgress)
+        progressView.setProgress(Float(webView.estimatedProgress), animated: true)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+        
+        
     }
     
     @IBAction private func didTapBackButton(_ sender: Any?) {

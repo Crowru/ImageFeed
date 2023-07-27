@@ -42,14 +42,15 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+        delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
-        vc.dismiss(animated: true)
+        dismiss(animated: true)
     }
 }
 
+// MARK: Status Bar Style
 extension AuthViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

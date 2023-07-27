@@ -1,6 +1,10 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     private let profilePhoto: UIImageView = {
         let image = UIImage(named: "userPhoto")
@@ -9,7 +13,7 @@ final class ProfileViewController: UIViewController {
         return imageView
     }()
     
-    private var nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.textColor = .ypWhite
@@ -18,7 +22,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var nicknameLabel: UILabel = {
+    private let nicknameLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaerina_nov"
         label.textColor = .ypGray
@@ -27,12 +31,13 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var descriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.textColor = .ypWhite
         label.font = UIFont.systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
         return label
     }()
     
@@ -48,10 +53,31 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupAllConstraints()
+        updateProfileDetails()
+        
+        view.backgroundColor = .ypBlack
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self else { return }
+                updateAvatar()
+            }
+        updateAvatar()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+    private func updateAvatar() {
+        guard let profileImageURL = ProfileImageService.shared.avatarURL,
+              let url = URL(string: profileImageURL) else { return }
+        
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        let processor = RoundCornerImageProcessor(cornerRadius: 42)
+        
+        profilePhoto.kf.setImage(with: url,
+                                 placeholder: UIImage(named: "placeholder"),
+                                 options: [.processor(processor), .transition(.fade(1))])
     }
     
     private func setupViews() {
@@ -77,9 +103,28 @@ final class ProfileViewController: UIViewController {
             
             descriptionLabel.topAnchor.constraint(equalTo: nicknameLabel.bottomAnchor, constant: 8),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             logoutButton.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor)
         ])
     }
 }
+
+// MARK: - Status Bar Style
+extension ProfileViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}
+
+private extension ProfileViewController {
+    func updateProfileDetails() {
+        guard let profile = profileService.profile else { return }
+        print("зашел в updateProfileDetails")
+        nameLabel.text = "\(profile.firstName) \(profile.lastName ?? "")"
+        nicknameLabel.text = "@\(profile.username)"
+        descriptionLabel.text = profile.bio
+    }
+}
+

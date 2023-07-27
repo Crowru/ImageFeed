@@ -1,6 +1,7 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
+    
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
@@ -14,7 +15,6 @@ final class SingleImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
-       
     }
     
     @IBAction func didTapBackAction(_ sender: UIButton) {
@@ -63,5 +63,12 @@ extension SingleImageViewController: UIScrollViewDelegate {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+}
+
+// MARK: Status Bar Style
+extension SingleImageViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
     }
 }

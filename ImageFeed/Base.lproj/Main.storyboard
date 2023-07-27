@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -319,10 +319,10 @@
             </objects>
             <point key="canvasLocation" x="1622" y="-317"/>
         </scene>
-        <!--Auth Nav-->
+        <!--Navigation Controller-->
         <scene sceneID="wSr-lm-QXS">
             <objects>
-                <navigationController storyboardIdentifier="AuthNav" automaticallyAdjustsScrollViewInsets="NO" id="ndk-qT-eEJ" customClass="AuthNav" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ndk-qT-eEJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="O1u-9h-iuk">
                         <rect key="frame" x="0.0" y="48" width="414" height="44"/>

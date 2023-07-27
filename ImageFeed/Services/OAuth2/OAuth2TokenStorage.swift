@@ -11,7 +11,9 @@ private enum Keys: String {
 
 final class OAuth2TokenStorage: OAuth2TokenStorageProtocol {
     
-    let userDefaults = UserDefaults.standard
+    static let shared = OAuth2TokenStorage()
+    
+    //let userDefaults = UserDefaults.standard
     
     var token: String? {
         get {

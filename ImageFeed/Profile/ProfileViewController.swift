@@ -51,20 +51,11 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         setupViews()
         setupAllConstraints()
         updateProfileDetails()
-        
-        view.backgroundColor = .ypBlack
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self else { return }
-                updateAvatar()
-            }
-        updateAvatar()
+        observerProfileImageService()
     }
     
     private func updateAvatar() {
@@ -78,6 +69,17 @@ final class ProfileViewController: UIViewController {
         profilePhoto.kf.setImage(with: url,
                                  placeholder: UIImage(named: "placeholder"),
                                  options: [.processor(processor), .transition(.fade(1))])
+    }
+    
+    private func observerProfileImageService() {
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self else { return }
+                updateAvatar()
+            }
+        updateAvatar()
     }
     
     private func setupViews() {
@@ -121,7 +123,6 @@ extension ProfileViewController {
 private extension ProfileViewController {
     func updateProfileDetails() {
         guard let profile = profileService.profile else { return }
-        print("зашел в updateProfileDetails")
         nameLabel.text = "\(profile.firstName) \(profile.lastName ?? "")"
         nicknameLabel.text = "@\(profile.username)"
         descriptionLabel.text = profile.bio

@@ -9,14 +9,7 @@ final class ImagesListViewController: UIViewController {
     private var imagesListServiceObserver: NSObjectProtocol?
     
     @IBOutlet private weak var tableView: UITableView!
-    
-//    private lazy var dateFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateStyle = .long
-//        formatter.timeStyle = .none
-//        return formatter
-//    }()
-    
+ 
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +25,9 @@ final class ImagesListViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
             return
         }
-//        let image = UIImage(named: photosName[indexPath.row])
-//        viewController.image = image
+        let photo = photos[indexPath.row].largeImageURL
+        let largeImageURL = URL(string: photo)
+        viewController.image = largeImageURL
     }
     
     // MARK: Table View
@@ -56,9 +50,12 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
+        imageListCell.delegate = self
+        
         let photo = photos[indexPath.row]
         
         imageListCell.setupCell(from: photo)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
         return imageListCell
     }
 }
@@ -121,8 +118,32 @@ extension ImagesListViewController {
     }
 }
 
+// MARK: - Images List Cell Delegate
+extension ImagesListViewController: ImagesListDelegate {
+    
+    func imagesListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        
+        UIBlockingProgressHUD.showWA()
+        
+        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success:
+                self.photos = self.imagesListService.photos
+                cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                UIBlockingProgressHUD.dismissWA()
+            case .failure(let error):
+                print(error.localizedDescription)
+                UIBlockingProgressHUD.dismissWA()
+            }
+        }
+    }
+}
+
 // MARK: - Status Bar Style
-final class NavigationControllerImagesList: UINavigationController {
+extension ImagesListViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }

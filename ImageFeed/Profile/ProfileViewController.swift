@@ -41,11 +41,12 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let logoutButton: UIButton = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton()
         let image = UIImage(named: "ipad.and.arrow.forward")
         button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
         return button
     }()
     
@@ -111,6 +112,29 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor)
         ])
     }
+    
+    @objc
+    private func didTapLogoutButton() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            OAuth2TokenStorage.shared.clean()
+            WebViewViewController.clean()
+            
+            guard let window = UIApplication.shared.windows.first else {
+                fatalError("invalid configuration")
+            }
+            window.rootViewController = SplashViewController()
+            window.makeKeyAndVisible()
+        }
+        
+        let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - Status Bar Style
@@ -120,6 +144,7 @@ extension ProfileViewController {
     }
 }
 
+// MARK: Update Profile Details
 private extension ProfileViewController {
     func updateProfileDetails() {
         guard let profile = profileService.profile else { return }
@@ -128,4 +153,3 @@ private extension ProfileViewController {
         descriptionLabel.text = profile.bio
     }
 }
-

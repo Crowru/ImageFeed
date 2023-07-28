@@ -8,23 +8,8 @@
 import Foundation
 
 extension URLRequest {
-    static func makeHTTPRequest(
-        path: String,
-        httpMethod: String,
-        queryItems: [URLQueryItem]? = nil,
-        baseURL: URL = defaultBaseURL
-    ) -> URLRequest? {
-        guard let url = URL(string: path, relativeTo: baseURL), var baseUrl = URL(string: path, relativeTo: url) else {
-            assertionFailure("Failed to make url")
-            return nil
-        }
-        baseUrl.appendQueryItems(queryItems: queryItems)
-        var request = URLRequest(url: baseUrl)
-        request.httpMethod = httpMethod
-        return request
-    }
     
-    static func makeHTTPRequest2(
+    static func makeHTTPRequest(
         path: String,
         httpMethod: String,
         queryItems: [URLQueryItem]? = nil,

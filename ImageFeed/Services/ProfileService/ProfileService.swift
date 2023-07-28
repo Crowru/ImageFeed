@@ -17,11 +17,10 @@ final class ProfileService {
 
         task?.cancel()
         lastToken = token
-        guard var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET") else {
+        guard let request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", baseURL: String(describing: defaultBaseURL)) else {
             assertionFailure("Failed to make HTTP request")
             return
         }
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self else { return }
             switch result {

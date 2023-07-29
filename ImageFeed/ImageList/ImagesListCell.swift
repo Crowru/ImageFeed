@@ -8,6 +8,7 @@ protocol ImagesListDelegate: AnyObject {
 final class ImagesListCell: UITableViewCell {
     
     static let reuseIdentifier = "ImagesListCell"
+    let cache = ImageCache.default
     weak var delegate: ImagesListDelegate?
     
     @IBOutlet weak var likeButton: UIButton!
@@ -27,7 +28,6 @@ final class ImagesListCell: UITableViewCell {
     }
     
     func setupCell(from photo: Photo) {
-        let cache = ImageCache.default
         cache.clearMemoryCache()
         cache.clearDiskCache()
         
@@ -50,6 +50,15 @@ final class ImagesListCell: UITableViewCell {
     func setIsLiked(isLiked: Bool) {
         let likeImage = isLiked ? UIImage(named: "likeOn") : UIImage(named: "likeOff")
         likeButton.setImage(likeImage, for: .normal)
+    }
+    
+    static func clean() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+        cache.backgroundCleanExpiredDiskCache()
+        cache.cleanExpiredMemoryCache()
+        cache.clearCache()
     }
     
     @IBAction private func likeButtonClicked(_ sender: UIButton) {

@@ -63,12 +63,9 @@ final class ImagesListService {
 // MARK: Response Photo Next Page
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
-        print("до проверки")
-        if currentTask != nil {
-            currentTask?.cancel()
-        }
-        print("после проверки")
         
+        guard currentTask == nil else { return }
+       
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         
         guard let request = makeRequest(page: nextPage) else {
@@ -80,7 +77,6 @@ final class ImagesListService {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let photoResults):
-                    print("Я ЗАШЕЛ В УДАЧУ")
                     if self.lastLoadedPage == nil {
                         self.lastLoadedPage = 1
                     } else {
@@ -94,15 +90,13 @@ final class ImagesListService {
                                                     object: nil)
                     
                 case .failure(let error):
-                    print("я зашел в ошибку")
                     print(error.localizedDescription)
-                    
                 }
             }
+            self.currentTask = nil
         }
         self.currentTask = task
         task.resume()
-        
     }
     
 // MARK: Response Change Like

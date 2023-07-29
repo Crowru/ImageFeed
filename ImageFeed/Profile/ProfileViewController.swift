@@ -120,6 +120,7 @@ final class ProfileViewController: UIViewController {
         let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
             OAuth2TokenStorage.shared.clean()
             WebViewViewController.clean()
+            ImagesListCell.clean()
             
             guard let window = UIApplication.shared.windows.first else {
                 fatalError("invalid configuration")

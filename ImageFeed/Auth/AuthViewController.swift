@@ -16,8 +16,6 @@ final class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.barStyle = .black
-
         authButton.layer.cornerRadius = 16
         authButton.layer.masksToBounds = true
     }

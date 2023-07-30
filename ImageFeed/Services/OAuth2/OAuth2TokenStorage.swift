@@ -11,8 +11,8 @@ private enum Keys: String {
 
 final class OAuth2TokenStorage: OAuth2TokenStorageProtocol {
     
-    let userDefaults = UserDefaults.standard
-    
+    static let shared = OAuth2TokenStorage()
+            
     var token: String? {
         get {
             KeychainWrapper.standard.string(forKey: Keys.token.rawValue)
@@ -24,5 +24,8 @@ final class OAuth2TokenStorage: OAuth2TokenStorageProtocol {
             }
             KeychainWrapper.standard.set(newValue, forKey: Keys.token.rawValue)
         }
+    }
+    func clean() {
+        KeychainWrapper.standard.removeAllKeys()
     }
 }

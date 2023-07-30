@@ -41,30 +41,22 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let logoutButton: UIButton = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton()
         let image = UIImage(named: "ipad.and.arrow.forward")
         button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         setupViews()
         setupAllConstraints()
         updateProfileDetails()
-        
-        view.backgroundColor = .ypBlack
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self else { return }
-                updateAvatar()
-            }
-        updateAvatar()
+        observerProfileImageService()
     }
     
     private func updateAvatar() {
@@ -78,6 +70,17 @@ final class ProfileViewController: UIViewController {
         profilePhoto.kf.setImage(with: url,
                                  placeholder: UIImage(named: "placeholder"),
                                  options: [.processor(processor), .transition(.fade(1))])
+    }
+    
+    private func observerProfileImageService() {
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self else { return }
+                updateAvatar()
+            }
+        updateAvatar()
     }
     
     private func setupViews() {
@@ -109,6 +112,30 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor)
         ])
     }
+    
+    @objc
+    private func didTapLogoutButton() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            OAuth2TokenStorage.shared.clean()
+            WebViewViewController.clean()
+            ImagesListCell.clean()
+            
+            guard let window = UIApplication.shared.windows.first else {
+                fatalError("invalid configuration")
+            }
+            window.rootViewController = SplashViewController()
+            window.makeKeyAndVisible()
+        }
+        
+        let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - Status Bar Style
@@ -118,13 +145,12 @@ extension ProfileViewController {
     }
 }
 
+// MARK: Update Profile Details
 private extension ProfileViewController {
     func updateProfileDetails() {
         guard let profile = profileService.profile else { return }
-        print("зашел в updateProfileDetails")
         nameLabel.text = "\(profile.firstName) \(profile.lastName ?? "")"
         nicknameLabel.text = "@\(profile.username)"
         descriptionLabel.text = profile.bio
     }
 }
-

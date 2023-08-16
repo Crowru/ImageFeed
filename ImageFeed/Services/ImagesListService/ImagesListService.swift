@@ -1,6 +1,12 @@
 import Foundation
 
-struct Photo: Codable {
+protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+}
+
+public struct Photo: Codable {
     let id: String
     let size: CGSize
     let createdAt: Date?
@@ -45,14 +51,12 @@ struct PhotoLike: Decodable {
     let photo: PhotoResult
 }
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     
     static let shared = ImagesListService()
-    
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private let urlSession = URLSession.shared
-    
     private let dateFormatter = ISO8601DateFormatter()
     
     private(set) var photos: [Photo] = []
@@ -60,12 +64,12 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private var currentTask: URLSessionTask?
     
-// MARK: Response Photo Next Page
+    // MARK: Response Photo Next Page
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         
         guard currentTask == nil else { return }
-       
+        
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         
         guard let request = makeRequest(page: nextPage) else {
@@ -99,7 +103,7 @@ final class ImagesListService {
         task.resume()
     }
     
-// MARK: Response Change Like
+    // MARK: Response Change Like
     func changeLike(photoId: String, isLike: Bool, _ complition: @escaping (Result<Void, Error>) -> Void) {
         if currentTask != nil {
             currentTask?.cancel()
@@ -140,7 +144,7 @@ final class ImagesListService {
         task.resume()
     }
     
-// MARK: Requests
+    // MARK: Requests
     private func makeRequest(page: Int) -> URLRequest? {
         let queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
@@ -149,12 +153,12 @@ final class ImagesListService {
         return URLRequest.makeHTTPRequest(path: "/photos",
                                           httpMethod: "GET",
                                           queryItems: queryItems,
-                                           baseURL: String(describing: defaultBaseURL))
+                                          baseURL: String(describing: defaultBaseURL))
     }
     
     private func makeLikeRequest(photoId: String, isLike: Bool) -> URLRequest? {
         URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like",
-                                    httpMethod: isLike ? "POST" : "DELETE",
-                                    baseURL: String(describing: defaultBaseURL))
+                                   httpMethod: isLike ? "POST" : "DELETE",
+                                   baseURL: String(describing: defaultBaseURL))
     }
 }

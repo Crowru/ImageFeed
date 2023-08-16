@@ -3,7 +3,6 @@ import UIKit
 final class SingleImageViewController: UIViewController {
     
     var image: URL?
-    
     var imageDownload: UIImage?
     
     @IBOutlet weak private var imageView: UIImageView!
@@ -16,8 +15,8 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
         loadAndShowImage(url: image)
     }
-
-// MARK: Load and show image
+    
+    // MARK: Load and show image
     func loadAndShowImage(url: URL?) {
         guard let url else { return }
         UIBlockingProgressHUD.show()

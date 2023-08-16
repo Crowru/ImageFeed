@@ -6,7 +6,7 @@ final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
-
+    
     private var splashImage: UIImageView = {
         let image = UIImage(named: "launchScreenLogo")
         let imageView = UIImageView(image: image)
@@ -23,9 +23,9 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
         if let token = oauth2TokenStorage.token {
-            fetchProfile(token: token)            
+            fetchProfile(token: token)
         } else {
             switchToAuthViewController()
         }
@@ -41,7 +41,7 @@ final class SplashViewController: UIViewController {
             splashImage.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-
+    
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
@@ -102,11 +102,9 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self else { return }
             switch result {
             case .success(let profile):
-                //guard let userName = self.profileService.profile?.username else { return }
-                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
+                ProfileImageService.shared.fetchProfileImageURL(profile.username) { _ in }
                 self.switchToTabBarController()
                 UIBlockingProgressHUD.dismiss()
-                
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 showAlert()

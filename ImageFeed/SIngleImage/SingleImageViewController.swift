@@ -3,6 +3,7 @@ import UIKit
 final class SingleImageViewController: UIViewController {
     
     var image: URL?
+    
     var imageDownload: UIImage?
     
     @IBOutlet weak private var imageView: UIImageView!
@@ -15,8 +16,8 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
         loadAndShowImage(url: image)
     }
-    
-    // MARK: Load and show image
+
+// MARK: Load and show image
     func loadAndShowImage(url: URL?) {
         guard let url else { return }
         UIBlockingProgressHUD.show()
@@ -34,19 +35,53 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
+    func compressImage(_ image: UIImage) -> UIImage {
+        let targetSizeInMB: Double = 10.0
+        let maxCompressionIterations = 5
+        
+        var compressedImage = image
+        var currentSizeInMB = Double(compressedImage.pngData()?.count ?? 0) / (1024.0 * 1024.0)
+        var iteration = 0
+        
+        while currentSizeInMB > targetSizeInMB && iteration < maxCompressionIterations {
+            let compressionRatio: CGFloat = CGFloat(targetSizeInMB / currentSizeInMB)
+            let newWidth = Int(compressedImage.size.width * sqrt(compressionRatio))
+            let newHeight = Int(compressedImage.size.height * sqrt(compressionRatio))
+            let newImageSize = CGSize(width: newWidth, height: newHeight)
+            
+            UIGraphicsBeginImageContext(newImageSize)
+            compressedImage.draw(in: CGRect(origin: .zero, size: newImageSize))
+            if let resizedImage = UIGraphicsGetImageFromCurrentImageContext() {
+                compressedImage = resizedImage
+                currentSizeInMB = Double(compressedImage.pngData()?.count ?? 0) / (1024.0 * 1024.0)
+            }
+            UIGraphicsEndImageContext()
+            iteration += 1
+        }
+        self.imageDownload = compressedImage
+        return compressedImage
+    }
+    
+    func showShareActivityController() {
+        guard let imageDownload else { return }
+        
+        let share = UIActivityViewController(
+            activityItems: [compressImage(imageDownload)],
+            applicationActivities: nil
+        )
+        share.overrideUserInterfaceStyle = .dark
+        
+        present(share, animated: true, completion: nil)
+    }
+
     @IBAction func didTapBackAction(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func didTabShareButton(_ sender: UIButton) {
-        guard let image = self.imageDownload else { return }
-        let share = UIActivityViewController(
-            activityItems: [image],
-            applicationActivities: nil
-        )
-        share.overrideUserInterfaceStyle = .dark
-        present(share, animated: true, completion: nil)
+        showShareActivityController()
     }
 }
+
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

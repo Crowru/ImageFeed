@@ -27,6 +27,7 @@ final class ImagesListServiceTests: XCTestCase {
 //        XCTAssertEqual(service.photos.count, 10)
 //        service.fetchPhotosNextPage()
 //        service.fetchPhotosNextPage()
+        
 //        service.fetchPhotosNextPage()
     }
 

@@ -91,8 +91,6 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 showAlert()
-                // TODO: Показать ошибку
-                // TODO: Sprint_11
             }
         }
     }

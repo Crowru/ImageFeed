@@ -6,8 +6,8 @@ final class SingleImageViewController: UIViewController {
     
     var imageDownload: UIImage?
     
-    @IBOutlet weak private var imageView: UIImageView!
-    @IBOutlet weak private var scrollView: UIScrollView!
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,10 +74,10 @@ final class SingleImageViewController: UIViewController {
         present(share, animated: true, completion: nil)
     }
 
-    @IBAction func didTapBackAction(_ sender: UIButton) {
+    @IBAction private func didTapBackAction(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
-    @IBAction func didTabShareButton(_ sender: UIButton) {
+    @IBAction private func didTabShareButton(_ sender: UIButton) {
         showShareActivityController()
     }
 }

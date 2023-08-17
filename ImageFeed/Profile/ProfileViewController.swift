@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     private let profileService = ProfileService.shared
     
     private let profilePhoto: UIImageView = {
-        let image = UIImage(named: "userPhoto")
+        let image = UIImage(named: "placeholder")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -93,8 +93,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             switch result {
             case .success(let image):
                 self.profilePhoto.image = image.image
-            case .failure:
-                self.profilePhoto.image = self.avatarPlaceHolder
+            case .failure(let error):
+                print("failed to upload avatar \(error)")
             }
         }
     }

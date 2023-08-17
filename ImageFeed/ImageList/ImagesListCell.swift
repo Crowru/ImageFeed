@@ -12,9 +12,9 @@ public final class ImagesListCell: UITableViewCell {
     
     weak var delegate: ImagesListDelegate?
     
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var imageCell: UIImageView!
+    @IBOutlet private weak var likeButton: UIButton!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var imageCell: UIImageView!
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

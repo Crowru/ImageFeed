@@ -1,6 +1,11 @@
 import Foundation
 
-final class ProfileService {
+protocol ProfileServiceProtocol {
+    var profile: ProfileResult? { get }
+    func fetchProfile(_ token: String, completion: @escaping (Result<ProfileResult, Error>) -> Void)
+}
+
+final class ProfileService: ProfileServiceProtocol {
     
     static let shared = ProfileService()
     
@@ -14,7 +19,7 @@ final class ProfileService {
     func fetchProfile(_ token: String, completion: @escaping (Result<ProfileResult, Error>) -> Void) {
         assert(Thread.isMainThread)
         if lastToken == token { return }
-
+        
         task?.cancel()
         lastToken = token
         guard let request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", baseURL: String(describing: defaultBaseURL)) else {
@@ -34,7 +39,7 @@ final class ProfileService {
             }
         }
         self.task = task
-
+        
         task.resume()
     }
 }

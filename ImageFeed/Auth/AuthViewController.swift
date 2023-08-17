@@ -22,19 +22,16 @@ final class AuthViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdentifier,
-           let viewController = segue.destination as? WebViewViewController {
-            viewController.delegate = self
+           let webViewViewController = segue.destination as? WebViewViewController {
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
+            
+            webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
-    }
-    
-    @IBAction private func didTapLoginButton(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction private func didTapAuthButton(_ sender: Any?) {
-        
     }
 }
 

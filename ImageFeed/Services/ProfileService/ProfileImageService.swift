@@ -1,6 +1,11 @@
 import Foundation
 
-final class ProfileImageService {
+protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    func fetchProfileImageURL(_ username: String, completion: @escaping (Result<String, Error>) -> Void)
+}
+
+final class ProfileImageService: ProfileImageServiceProtocol {
     
     private struct UserResult: Codable {
         let profileImage: ProfileImage
@@ -12,22 +17,23 @@ final class ProfileImageService {
         let large: String
     }
     
-    private var task: URLSessionTask?
-    private(set) var avatarURL: String?
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let urlSession = URLSession.shared
     private let oAuthTokenStorage = OAuth2TokenStorage()
     
+    private var task: URLSessionTask?
+    private(set) var avatarURL: String?
+    
     private init() {}
     
-    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void ) {
+    func fetchProfileImageURL(_ username: String, completion: @escaping (Result<String, Error>) -> Void ) {
         assert(Thread.isMainThread)
         task?.cancel()
         
         guard let request = URLRequest.makeHTTPRequest(path: "/users/\(username)",
-                                                        httpMethod: "GET",
-                                                        baseURL: String(describing: defaultBaseURL)) else {
+                                                       httpMethod: "GET",
+                                                       baseURL: String(describing: defaultBaseURL)) else {
             assertionFailure("Failed to make HTTP request")
             return
         }

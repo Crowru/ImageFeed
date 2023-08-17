@@ -150,8 +150,9 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="EC8-oa-Kzc"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="Qcb-5d-W9e"/>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oT7-Sg-GhE" userLabel="backButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oT7-Sg-GhE" userLabel="singleImageBackButton">
                                 <rect key="frame" x="9" y="10" width="24" height="24"/>
+                                <accessibility key="accessibilityConfiguration" identifier="singleImageBackButton" label="singleImageBackButton"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="Cuv-ZU-VMv"/>
                                     <constraint firstAttribute="width" constant="24" id="jnJ-jb-Ctm"/>
@@ -209,9 +210,10 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="authLogo" translatesAutoresizingMaskIntoConstraints="NO" id="MCV-yF-jda">
                                 <rect key="frame" x="177" y="425" width="60" height="60"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZsP-q1-3eE">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZsP-q1-3eE" userLabel="AuthenticateButton">
                                 <rect key="frame" x="16" y="703" width="382" height="48"/>
                                 <color key="backgroundColor" name="YP White"/>
+                                <accessibility key="accessibilityConfiguration" identifier="AuthenticateButton" label="AuthenticateButton"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Pqn-vx-RBK"/>
                                 </constraints>
@@ -221,7 +223,6 @@
                                     <color key="titleColor" name="YP Black"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapAuthButton:" destination="zqX-oD-Ewf" eventType="touchUpInside" id="C4t-Lj-a1l"/>
                                     <segue destination="U6I-B9-rw3" kind="presentation" identifier="ShowWebView" modalPresentationStyle="overFullScreen" id="99A-IY-kWL"/>
                                 </connections>
                             </button>
@@ -249,7 +250,7 @@
         <!--Web View View Controller-->
         <scene sceneID="q9g-qg-Qdg">
             <objects>
-                <viewController id="U6I-B9-rw3" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="U6I-B9-rw3" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sm3-ow-Wdg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

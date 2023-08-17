@@ -5,15 +5,16 @@ protocol ImagesListDelegate: AnyObject {
     func imagesListCellDidTapLike(_ cell: ImagesListCell)
 }
 
-final class ImagesListCell: UITableViewCell {
+public final class ImagesListCell: UITableViewCell {
     
     static let reuseIdentifier = "ImagesListCell"
     let cache = ImageCache.default
+    
     weak var delegate: ImagesListDelegate?
     
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var imageCell: UIImageView!
+    @IBOutlet private weak var likeButton: UIButton!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var imageCell: UIImageView!
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -23,7 +24,7 @@ final class ImagesListCell: UITableViewCell {
         return formatter
     }()
     
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         imageCell.kf.cancelDownloadTask()
     }
     

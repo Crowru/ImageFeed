@@ -49,6 +49,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         return label
     }()
     
+    private let gradientLayer = GradientLayer.share
+    
     var presenter: ProfileViewPresenterProtocol? = {
         return ProfileViewPresenter()
     }()
@@ -71,8 +73,15 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
         presenter?.view = self
         presenter?.updateProfileDetails()
-        
         presenter?.observerProfileImageService()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        gradientLayer.gradientLayer(view: profilePhoto, width: 70, height: 70, cornerRadius: 35)
+        gradientLayer.gradientLayer(view: nameLabel, width: nameLabel.intrinsicContentSize.width, height: nameLabel.intrinsicContentSize.height, cornerRadius: 10)
+        gradientLayer.gradientLayer(view: nicknameLabel, width: nicknameLabel.intrinsicContentSize.width, height: nicknameLabel.intrinsicContentSize.height, cornerRadius: 5)
+        gradientLayer.gradientLayer(view: descriptionLabel, width: (descriptionLabel.intrinsicContentSize.width <= 366) ? descriptionLabel.intrinsicContentSize.width : 366, height: descriptionLabel.intrinsicContentSize.height, cornerRadius: 5)
     }
     
     func setupProfileDetails(name: String, login: String, bio: String) {
@@ -93,6 +102,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             switch result {
             case .success(let image):
                 self.profilePhoto.image = image.image
+                self.gradientLayer.removeFromSuperLayer(views: [self.profilePhoto, self.nameLabel, self.nicknameLabel, self.descriptionLabel, self.logoutButton])
             case .failure(let error):
                 print("failed to upload avatar \(error)")
             }

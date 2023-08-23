@@ -34,6 +34,7 @@
 		2A7AC0522A58BAF5009C0BD1 /* URLSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7AC0512A58BAF5009C0BD1 /* URLSession+Extensions.swift */; };
 		2A7AC0542A58BB01009C0BD1 /* URLRequest+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7AC0532A58BB01009C0BD1 /* URLRequest+Extensions.swift */; };
 		2A8ED6512A34832F00697A35 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8ED6502A34832F00697A35 /* SingleImageViewController.swift */; };
+		2AA34A052A94F85F008D5F9F /* GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34A042A94F85F008D5F9F /* GradientLayer.swift */; };
 		2AA7F56A2A6AAD3100915CFF /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA7F5692A6AAD3100915CFF /* ImagesListService.swift */; };
 		2AD0773B2A600BB8003F71E6 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD0773A2A600BB8003F71E6 /* ProgressHUD */; };
 		2AD0773D2A606ABA003F71E6 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD0773C2A606ABA003F71E6 /* UIBlockingProgressHUD.swift */; };
@@ -93,6 +94,7 @@
 		2A7AC0512A58BAF5009C0BD1 /* URLSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extensions.swift"; sourceTree = "<group>"; };
 		2A7AC0532A58BB01009C0BD1 /* URLRequest+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+Extensions.swift"; sourceTree = "<group>"; };
 		2A8ED6502A34832F00697A35 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		2AA34A042A94F85F008D5F9F /* GradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLayer.swift; sourceTree = "<group>"; };
 		2AA7F5692A6AAD3100915CFF /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 		2AD0773C2A606ABA003F71E6 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		2AD0773F2A608F46003F71E6 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				2A7AC0502A58BAC7009C0BD1 /* Helpers */,
 				2A2E9B972A8D026D00577BC0 /* Presenter */,
 				2A2E9B962A8D023500577BC0 /* Resources */,
+				2AA34A032A94F835008D5F9F /* Animation */,
 				2A2AEA5C2A1FC264003EA15E /* Info.plist */,
 			);
 			path = ImageFeed;
@@ -279,6 +282,14 @@
 				2A8ED6502A34832F00697A35 /* SingleImageViewController.swift */,
 			);
 			path = SIngleImage;
+			sourceTree = "<group>";
+		};
+		2AA34A032A94F835008D5F9F /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				2AA34A042A94F85F008D5F9F /* GradientLayer.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		2AA7F5682A6AAD1000915CFF /* ImagesListService */ = {
@@ -472,6 +483,7 @@
 				2A08F9012A4CAA93007B9E0D /* OAuth2Service.swift in Sources */,
 				2A2AEA532A1FC263003EA15E /* ImagesListViewController.swift in Sources */,
 				2A1DC67F2A210CE5007EBDDA /* ImagesListCell.swift in Sources */,
+				2AA34A052A94F85F008D5F9F /* GradientLayer.swift in Sources */,
 				2A7AC0522A58BAF5009C0BD1 /* URLSession+Extensions.swift in Sources */,
 				2A4EED112A53607D002D192A /* SplashViewController.swift in Sources */,
 				2A2E9B822A8CED4700577BC0 /* AuthHelper.swift in Sources */,

@@ -93,7 +93,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         cache.clearMemoryCache()
         let processor = RoundCornerImageProcessor(cornerRadius: 42)
         
-        profilePhoto.kf.indicatorType = IndicatorType.activity
         profilePhoto.kf.setImage(with: url, placeholder: avatarPlaceHolder, options: [.processor(processor), .transition(.fade(1))]) { [weak self] result in
             guard let self else { return }
             switch result {

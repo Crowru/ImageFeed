@@ -76,18 +76,15 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         presenter?.observerProfileImageService()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        gradientLayer.gradientLayer(view: profilePhoto, width: 70, height: 70, cornerRadius: 35)
-        gradientLayer.gradientLayer(view: nameLabel, width: nameLabel.intrinsicContentSize.width, height: nameLabel.intrinsicContentSize.height, cornerRadius: 10)
-        gradientLayer.gradientLayer(view: nicknameLabel, width: nicknameLabel.intrinsicContentSize.width, height: nicknameLabel.intrinsicContentSize.height, cornerRadius: 5)
-        gradientLayer.gradientLayer(view: descriptionLabel, width: (descriptionLabel.intrinsicContentSize.width <= 366) ? descriptionLabel.intrinsicContentSize.width : 366, height: descriptionLabel.intrinsicContentSize.height, cornerRadius: 5)
-    }
-    
     func setupProfileDetails(name: String, login: String, bio: String) {
         nameLabel.text = name
         nicknameLabel.text = login
         descriptionLabel.text = bio
+        
+        gradientLayer.gradientLayer(view: profilePhoto, width: 70, height: 70, cornerRadius: 35)
+        gradientLayer.gradientLayer(view: nameLabel, width: nameLabel.intrinsicContentSize.width, height: nameLabel.intrinsicContentSize.height, cornerRadius: 10)
+        gradientLayer.gradientLayer(view: nicknameLabel, width: nicknameLabel.intrinsicContentSize.width, height: nicknameLabel.intrinsicContentSize.height, cornerRadius: 5)
+        gradientLayer.gradientLayer(view: descriptionLabel, width: (view.frame.width - 32.0), height: descriptionLabel.intrinsicContentSize.height * CGFloat(descriptionLabel.countLines()), cornerRadius: 5)
     }
     
     func setupAvatar(url: URL) {

@@ -49,6 +49,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         return label
     }()
     
+    private let gradientLayer = GradientLayer.share
+    
     var presenter: ProfileViewPresenterProtocol? = {
         return ProfileViewPresenter()
     }()
@@ -71,7 +73,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
         presenter?.view = self
         presenter?.updateProfileDetails()
-        
         presenter?.observerProfileImageService()
     }
     
@@ -79,6 +80,11 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         nameLabel.text = name
         nicknameLabel.text = login
         descriptionLabel.text = bio
+        
+        gradientLayer.gradientLayer(view: profilePhoto, width: 70, height: 70, cornerRadius: 35)
+        gradientLayer.gradientLayer(view: nameLabel, width: nameLabel.intrinsicContentSize.width, height: nameLabel.intrinsicContentSize.height, cornerRadius: 10)
+        gradientLayer.gradientLayer(view: nicknameLabel, width: nicknameLabel.intrinsicContentSize.width, height: nicknameLabel.intrinsicContentSize.height, cornerRadius: 5)
+        gradientLayer.gradientLayer(view: descriptionLabel, width: (view.frame.width - 32.0), height: descriptionLabel.intrinsicContentSize.height * CGFloat(descriptionLabel.countLines()), cornerRadius: 5)
     }
     
     func setupAvatar(url: URL) {
@@ -87,12 +93,12 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         cache.clearMemoryCache()
         let processor = RoundCornerImageProcessor(cornerRadius: 42)
         
-        profilePhoto.kf.indicatorType = IndicatorType.activity
         profilePhoto.kf.setImage(with: url, placeholder: avatarPlaceHolder, options: [.processor(processor), .transition(.fade(1))]) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let image):
                 self.profilePhoto.image = image.image
+                self.gradientLayer.removeFromSuperLayer(views: [self.profilePhoto, self.nameLabel, self.nicknameLabel, self.descriptionLabel, self.logoutButton])
             case .failure(let error):
                 print("failed to upload avatar \(error)")
             }

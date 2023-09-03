@@ -12,7 +12,7 @@ public final class ImagesListCell: UITableViewCell {
     
     weak var delegate: ImagesListDelegate?
     
-    @IBOutlet private weak var likeButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var imageCell: UIImageView!
     
